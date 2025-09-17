@@ -1,0 +1,118 @@
+-- 99 Nights in the Forest GUI Script
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/Library.lua"))()
+
+local Window = Library:CreateWindow("99 Nights Hack")
+local Tabs = {
+    Base = Window:AddTab("Base"),
+    Auto = Window:AddTab("Auto"),
+    Settings = Window:AddTab("Settings")
+}
+
+-- Базовая вкладка
+Tabs.Base:AddSlider("WalkSpeed", {
+    Text = "Скорость передвижения",
+    Default = 16,
+    Min = 16,
+    Max = 100,
+    Rounding = 1,
+    Callback = function(value)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
+    end
+})
+
+Tabs.Base:AddSlider("JumpPower", {
+    Text = "Сила прыжка",
+    Default = 50,
+    Min = 50,
+    Max = 200,
+    Rounding = 1,
+    Callback = function(value)
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = value
+    end
+})
+
+Tabs.Base:AddToggle("Noclip", {
+    Text = "Режим NoClip",
+    Default = false,
+    Callback = function(state)
+        _G.Noclip = state
+        while _G.Noclip do
+            task.wait()
+            if game.Players.LocalPlayer.Character then
+                for _, part in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                    if part:IsA("BasePart") then
+                        part.CanCollide = false
+                    end
+                end
+            end
+        end
+    end
+})
+
+Tabs.Base:AddToggle("Fly", {
+    Text = "Полёт",
+    Default = false,
+    Callback = function(state)
+        _G.Fly = state
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGui/main/FlyGui.lua"))()
+    end
+})
+
+-- Авто вкладка
+Tabs.Auto:AddToggle("AutoSurvive", {
+    Text = "Авто выживание",
+    Default = false,
+    Callback = function(state)
+        _G.AutoSurvive = state
+        while _G.AutoSurvive do
+            task.wait(1)
+            -- Авто сбор топлива
+            if game:GetService("Workspace"):FindFirstChild("Fire") then
+                local fire = game.Workspace.Fire
+                if fire.Fuel.Value < 40 then
+                    -- Код поиска и сбора топлива
+                end
+            end
+            
+            -- Авто поедание пищи
+            if game.Players.LocalPlayer.Character.Humanoid.Health < 80 then
+                -- Код поиска и употребления пищи
+            end
+            
+            -- Авто убийство мобов
+            for _, enemy in pairs(game.Workspace.Enemies:GetChildren()) do
+                if (enemy.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude < 1000 then
+                    -- Код убийства моба
+                end
+            end
+        end
+    end
+})
+
+Tabs.Auto:AddToggle("AutoFarm", {
+    Text = "Авто фарм алмазов",
+    Default = false,
+    Callback = function(state)
+        _G.AutoFarm = state
+        if state then
+            loadstring(game:HttpGet("https://rawscripts.net/raw/99-Nights-in-the-Forest-Farm-diamond-v2-50169"))()
+        end
+    end
+})
+
+-- Настройки
+Tabs.Settings:AddButton({
+    Text = "Сохранить настройки",
+    Func = function()
+        Library:SaveConfig("99NightsConfig")
+    end
+})
+
+Tabs.Settings:AddButton({
+    Text = "Загрузить настройки",
+    Func = function()
+        Library:LoadConfig("99NightsConfig")
+    end
+})
+
+Library:Notify("Скрипт загружен! Открой GUI клавишей RightShift")
