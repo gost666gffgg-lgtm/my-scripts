@@ -1,2 +1,2 @@
-print("Привет из Pastebin!")
-print("Этот код загружен из интернета!")
+print("Привет из GitHub!")
+print("Мой код теперь на GitHub!")
